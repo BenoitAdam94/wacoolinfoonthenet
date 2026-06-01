@@ -1,6 +1,6 @@
 <?php
 /**
- * The main template file
+ * The template for displaying archive pages
  *
  * @package wacool-info-on-the-net
  */
@@ -10,7 +10,10 @@ get_header();
 
 <main id="primary" class="col-xl-8 site-main" role="main">
 
-	<h2 class="p-2"><u><?php esc_html_e( 'Home', 'wacool-info-on-the-net' ); ?></u></h2>
+	<header class="p-3">
+		<?php the_archive_title( '<h1>', '</h1>' ); ?>
+		<?php the_archive_description( '<div class="archive-description">', '</div>' ); ?>
+	</header>
 
 	<?php if ( have_posts() ) : ?>
 
@@ -24,24 +27,18 @@ get_header();
 						<?php the_title(); ?>
 						<span class="post-meta">
 							&mdash;
-							<?php
-							printf(
-								/* translators: 1: date, 2: time, 3: author */
-								esc_html__( '%1$s at %2$s by %3$s', 'wacool-info-on-the-net' ),
-								esc_html( get_the_date() ),
-								esc_html( get_the_time() ),
-								esc_html( get_the_author() )
-							);
-							?>
+							<?php echo esc_html( get_the_date() ); ?>
+							<?php esc_html_e( 'by', 'wacool-info-on-the-net' ); ?>
+							<?php echo esc_html( get_the_author() ); ?>
 						</span>
 					</a>
 				</p>
 
 				<div class="post-content p-2">
-					<?php the_content(); ?>
+					<?php the_excerpt(); ?>
 				</div>
 
-			</article><!-- #post-<?php the_ID(); ?> -->
+			</article>
 
 		<?php endwhile; ?>
 

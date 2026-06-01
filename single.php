@@ -1,45 +1,79 @@
-<?php get_header(); ?>
-<!-- DEBUT DE MAIN -->
-<div class="col-xl-8 bg-color-black">
+<?php
+/**
+ * The template for displaying all single posts
+ *
+ * @package wacool-info-on-the-net
+ */
 
-	<h2><?php the_title(); ?></h2> <!-- Le Titre du post-->
+get_header();
+?>
 
-	<div>
-		<span class="date"><?php the_date(); ?></span> <!-- La Date -->
+<main id="primary" class="col-xl-8 site-main" role="main">
 
-		<?php
-		the_tags(
-			'<span class="tag"><i class="fa fa-tag"></i> ', // Début
-			'</span><span class="tag"><i class="fa fa-tag"></i> ', // Entre 2 tags
-			'</span>' // Fin
-		);
-		?>
-	</div>
+	<?php while ( have_posts() ) : the_post(); ?>
 
-	<?php
-	the_post_thumbnail('medium'); // La miniature du post	
-	the_content(); // Le contenu 
-	?>
+		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-	<hr>
+			<header class="p-3">
+				<h1><?php the_title(); ?></h1>
 
-	<?php
-	the_post_navigation(); // Navigation Single Post
-	?>
+				<div class="post-meta mb-2">
+					<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>">
+						<?php echo esc_html( get_the_date() ); ?>
+					</time>
 
-	<hr>
-	
-		<a href="#comments"><i class='fa fa-comment'></i> <?php comments_number(); ?></a>
+					<?php
+					the_tags(
+						'<span class="tags ms-2"><i class="fa fa-tag" aria-hidden="true"></i> ',
+						'</span><span class="tags"><i class="fa fa-tag" aria-hidden="true"></i> ',
+						'</span>'
+					);
+					?>
+				</div>
+			</header>
 
-		<?php
-		// If comments are open or we have at least one comment, load up the comment template.
-		if ( comments_open() || get_comments_number() ) {
-			comments_template();  // Appeller comments.php 
-		}
-		
-		?>
-	
-</div>
+			<?php if ( has_post_thumbnail() ) : ?>
+				<div class="text-center p-2">
+					<?php the_post_thumbnail( 'medium', array( 'class' => 'img-fluid' ) ); ?>
+				</div>
+			<?php endif; ?>
 
-<!-- FIN DE MAIN -->
+			<div class="entry-content post-content p-2">
+				<?php
+				the_content();
+
+				wp_link_pages(
+					array(
+						'before'      => '<div class="page-links">' . esc_html__( 'Pages:', 'wacool-info-on-the-net' ),
+						'after'       => '</div>',
+						'link_before' => '<span class="page-link">',
+						'link_after'  => '</span>',
+					)
+				);
+				?>
+			</div><!-- .entry-content -->
+
+		</article><!-- #post-<?php the_ID(); ?> -->
+
+		<nav class="post-navigation p-3" aria-label="<?php esc_attr_e( 'Post navigation', 'wacool-info-on-the-net' ); ?>">
+			<?php the_post_navigation(); ?>
+		</nav>
+
+		<section class="comments-area p-3" id="comments">
+			<a href="#comments">
+				<i class="fa fa-comment" aria-hidden="true"></i>
+				<?php comments_number(); ?>
+			</a>
+
+			<?php
+			if ( comments_open() || get_comments_number() ) {
+				comments_template();
+			}
+			?>
+		</section>
+
+	<?php endwhile; ?>
+
+</main><!-- #primary -->
+
 <?php get_footer(); ?>
